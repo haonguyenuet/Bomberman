@@ -8,7 +8,11 @@ import uet.oop.bomberman.entities.movingEntity.Bomber;
 import uet.oop.bomberman.entities.staticEntity.Brick;
 import uet.oop.bomberman.entities.staticEntity.Wall;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sounds.SoundEffect;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,11 +46,6 @@ public class Bom extends Entity {
 		entity_up = BombermanGame.getEntity(x , yTop);
 		entity_down = BombermanGame.getEntity(x , yBottom);
 		entity_center = BombermanGame.getEntity(x , y);
-		if (timeToExplodes < 30) {
-			img = Sprite.bomb_2.getFxImage();
-		} else if (timeToExplodes < 70) {
-			img = Sprite.bomb_1.getFxImage();
-		}
 		if (timeToExplodes > 0) {
 			timeToExplodes--;
 		} else {
@@ -54,39 +53,28 @@ public class Bom extends Entity {
 			BombermanGame.bombExplode(explosions);
 			bomExplodes();
 		}
+		if (timeToExplodes < 20) {
+			img = Sprite.bomb_2.getFxImage();
+		} else if (timeToExplodes < 70) {
+			img = Sprite.bomb_1.getFxImage();
+		}
 	}
 
 	private void bomExplodes() {
+		SoundEffect.play("res/sound/1.wav");
 		if (entity_left instanceof Brick || entity_left instanceof MovingEntity) {
-			if (entity_left instanceof Bomber) {
-				((Bomber) entity_left).setAlive(false);
-			}
 			entity_left.remove();
 		}
 		if (entity_right instanceof Brick || entity_right instanceof MovingEntity) {
-			if (entity_right instanceof Bomber) {
-				((Bomber) entity_right).setAlive(false);
-			}
 			entity_right.remove();
 		}
 		if (entity_up instanceof Brick || entity_up instanceof MovingEntity) {
-			if (entity_up instanceof Bomber) {
-				((Bomber) entity_up).setAlive(false);
-			}
 			entity_up.remove();
-
 		}
 		if (entity_down instanceof Brick || entity_down instanceof MovingEntity) {
-			if (entity_down instanceof Bomber) {
-				((Bomber) entity_down).setAlive(false);
-			}
 			entity_down.remove();
-
 		}
 		if (entity_center instanceof Brick || entity_center instanceof MovingEntity) {
-			if (entity_center instanceof Bomber) {
-				((Bomber) entity_center).setAlive(false);
-			}
 			entity_center.remove();
 		}
 	}

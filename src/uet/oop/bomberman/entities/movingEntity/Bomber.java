@@ -5,10 +5,10 @@ import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.input.Direction;
+import uet.oop.bomberman.sounds.SoundEffect;
 
 public class Bomber extends MovingEntity {
 	private Direction direction = Direction.NONE;
-	private boolean isAlive = true;
 
 	public Bomber( int x , int y , Image img ) {
 		super(x , y , img);
@@ -48,8 +48,8 @@ public class Bomber extends MovingEntity {
 	}
 
 
-	private boolean isCanMove( int x , int y ) {
-		Entity entity = BombermanGame.getEntity(x , y);
+	private boolean isCanMove( int a , int b ) {
+		Entity entity = BombermanGame.getEntity(a , b);
 		if (entity == null) return true;
 		return this.collide(entity);
 	}
@@ -57,20 +57,17 @@ public class Bomber extends MovingEntity {
 	private void checkAlive() {
 		Entity enemy = BombermanGame.getEnemy(x , y);
 		if (enemy != null) {
-			isAlive = false;
 			remove();
 		}
 	}
 
+	@Override
+	public void remove() {
+		super.remove();
+		SoundEffect.play("res/sound/5.wav");
+	}
+
 	public void setDirection( Direction direction ) {
 		this.direction = direction;
-	}
-
-	public void setAlive( boolean alive ) {
-		isAlive = alive;
-	}
-
-	public boolean isAlive() {
-		return isAlive;
 	}
 }

@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.bom.Bom;
@@ -22,10 +23,9 @@ import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.gui.ButtonGame;
 import uet.oop.bomberman.gui.LabelGame;
 import uet.oop.bomberman.input.Direction;
+import uet.oop.bomberman.sounds.SoundEffect;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +33,7 @@ public class BombermanGame extends Application {
 
 	public static int WIDTH = 31;
 	public static int HEIGHT = 13;
+	private int level = 1;
 
 	private GraphicsContext gc;
 	private Canvas canvas;
@@ -41,16 +42,16 @@ public class BombermanGame extends Application {
 	private ButtonGame nextLevel;
 	private ButtonGame playAgain;
 
+	private boolean soundDead = false;
+
 	private static List<Entity> entities = new ArrayList<>();
 	private static List<Entity> fixedEntities = new ArrayList<>();
 	private static List<Entity> explosions = new ArrayList<>();
 	
 	private Bomber bomberman;
 	private static Bom bomb;
-
 	private Portal portal;
 
-	private int level = 1;
 
 	public static void main( String[] args ) {
 		Application.launch(BombermanGame.class);
@@ -121,12 +122,10 @@ public class BombermanGame extends Application {
 		root.getChildren().addAll(caption , canvas , nextLevel , playAgain);
 		// Tao scene
 		Scene scene = new Scene(root);
-
 		// Them scene vao stage
 		stage.setScene(scene);
 		stage.show();
-
-
+		// animation loop
 		AnimationTimer timer = new AnimationTimer() {
 			@Override
 			public void handle( long l ) {
@@ -136,6 +135,8 @@ public class BombermanGame extends Application {
 		};
 		timer.start();
 		createMap();
+//		// music background
+		SoundEffect.loop("res/sound/music_background.wav");
 	}
 
 	public void createMap() throws IOException {
@@ -183,7 +184,7 @@ public class BombermanGame extends Application {
 	}
 
 	public void update() {
-		if (!bomberman.isAlive()) {
+		if (bomberman.isRemoved()) {
 			caption.setText("Game Over");
 			playAgain.setDisable(false);
 			canvas.setDisable(true);
@@ -263,5 +264,4 @@ public class BombermanGame extends Application {
 		}
 		return (bomberman.getX() == portal.getX() && bomberman.getY() == portal.getY());
 	}
-
 }

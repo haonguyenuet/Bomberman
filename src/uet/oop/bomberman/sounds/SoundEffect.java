@@ -1,8 +1,5 @@
 package uet.oop.bomberman.sounds;
 
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.Player;
-
 import javax.sound.sampled.*;
 import java.io.*;
 
